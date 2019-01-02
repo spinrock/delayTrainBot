@@ -1,8 +1,6 @@
 # coding: utf-8
 
 import requests
-from DelayInfo import DelayInfo as DI
-
 
 class Message:
     postUrl = ''
@@ -15,10 +13,10 @@ class Message:
                         'Authorization': 'Bearer {' + accessToken + '}'}
         self.postData = ''
 
-    def setData(self, to, *texts):
+    def setData(self, to, texts):
         self.postData = '{"to": "' + to + '", "messages":[' 
         for text in texts:
-            self.postData = self.postData + '{"type":"text","text":"' + DI(text).getInfo() + '"},' 
+            self.postData = self.postData + '{"type":"text","text":"' + text + '"},' 
         self.postData = self.postData[:-1] + ']}'
         self.postData = self.postData
 

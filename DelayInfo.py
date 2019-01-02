@@ -1,7 +1,7 @@
 # coding: utf-8
 
 import urllib
-import bs4
+from bs4 import BeautifulSoup
 
 class DelayInfo:
 	train = ''
@@ -9,8 +9,8 @@ class DelayInfo:
 	update = ''
 
 	def __init__(self,url):
-		html = urllib.urlopen(url).read()
-		soup = bs4.BeautifulSoup(html, 'html.parser')
+		html = urllib.request.urlopen(url).read()
+		soup = BeautifulSoup(html, 'html.parser')
 		delayInfo = soup.find('div', {'id': 'mdServiceStatus'})
 		labelInfo = soup.find('div', {'class': 'labelLarge'})
 		self.train = labelInfo.h1.find(text=True, recursive=False)
