@@ -12,12 +12,15 @@ def lambda_handler(event, context):
 
     # 変数宣言
     postUrl = ""
+    postChannel = ""
     urlList = []
-    messageList = []
 
     # 環境変数から情報取得(復号化)
     ENCRYPTED = os.environ['postUrl']
     postUrl = boto3.client('kms').decrypt(CiphertextBlob=b64decode(ENCRYPTED))['Plaintext']
+
+    ENCRYPTED = os.environ['postChannel']
+    postChannel = boto3.client('kms').decrypt(CiphertextBlob=b64decode(ENCRYPTED))['Plaintext']
 
     # jsonからの路線情報の取得
     for url in event['urlList']:
@@ -29,7 +32,7 @@ def lambda_handler(event, context):
     for trainUrl in urlList:
         delayInfo = DelayInfo(trainUrl)
         if  "現在､事故･遅延に関する情報はありません。" not in delayInfo.getInfo() :
-            message.setData(delayInfo.getInfo(), 'lambda', '#spinrock_delaytrain')
+            message.setData(delayInfo.getInfo(), 'delayTrainBot', postChannel)
             message.post()
 
     return {
