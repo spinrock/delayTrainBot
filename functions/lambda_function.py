@@ -18,9 +18,11 @@ def lambda_handler(event, context):
     # 環境変数から情報取得(復号化)
     ENCRYPTED = os.environ['postUrl']
     postUrl = boto3.client('kms').decrypt(CiphertextBlob=b64decode(ENCRYPTED))['Plaintext']
+    postUrl = postUrl.decode('utf-8')
 
     ENCRYPTED = os.environ['postChannel']
     postChannel = boto3.client('kms').decrypt(CiphertextBlob=b64decode(ENCRYPTED))['Plaintext']
+    postChannel = postChannel.decode('utf-8')
 
     # jsonからの路線情報の取得
     for url in event['urlList']:
